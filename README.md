@@ -2,12 +2,14 @@
 
 A simple, performant and flexible drawing tool for React Native built with [react-native-skia](https://github.com/Shopify/react-native-skia) and [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/docs/).
 
-## Installation
+## Install
 ```bash
 yarn add @harrisontaee/react-native-canvas
 ```
 
-## Imports
+Note that this will not work with Expo Go as it depends on [reanimated v3.]() To use this library with Expo, create your own [development builds](https://docs.expo.dev/develop/development-builds/introduction/) and follow the instructions [here](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation) to install and configure reanimated.
+
+## Import
 ```tsx
 /* Component */
 import {Canvas} from "@harrisontaee/react-native-canvas";
@@ -20,6 +22,7 @@ import {Colours, Tools, BrushRadii, EraserRadii} from "@harrisontaee/react-nativ
 ```
 
 ## Usage
+Render the canvas with the all or none of the following props and it's ready to go out the box (state management is handled internally).
 ```tsx
 <Canvas
    /* Canvas styling */
@@ -49,6 +52,7 @@ import {Colours, Tools, BrushRadii, EraserRadii} from "@harrisontaee/react-nativ
 ```
 
 ## Manipulate Imperatively
+Useful for when receiving or sending data to a remote or local database. Also useful for undo/redo functionality.
 ```tsx
 /* Import the hook */
 import {useRef} from "react";
