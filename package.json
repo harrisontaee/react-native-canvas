@@ -1,0 +1,16 @@
+{
+	"name": "@harrisontaee/react-native-canvas",
+	"version": "0.0.0",
+	"description": "A performant drawing component built on react-native-skia",
+	"main": "index.ts",
+	"author": "Harrison Taee <harrisontaee@protonmail.com> (https://github.com/harrisontaee)",
+	"license": "MIT",
+	"homepage": "https://github.com/harrisontaee/react-native-canvas#readme",
+	"repository": {
+	  "type": "git",
+	  "url": "git+https://github.com/harrisontaee/react-native-canvas.git"
+	},
+	"bugs": {
+	  "url": "https://github.com/harrisontaee/react-native-canvas/issues"
+	}
+ }
