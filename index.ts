@@ -1,3 +1,8 @@
-export * from "./canvas";
-export * from "./store";
-export * from "./types";
+/* Component */
+export {Canvas} from "./canvas";
+
+/* Types */
+export {Diff, Path} from "./constants";
+
+/* Enums */
+export {BrushRadii, Colours, EraserRadii, Tools} from "./constants";

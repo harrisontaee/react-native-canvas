@@ -22,7 +22,7 @@ import {Colours, Tools, BrushRadii, EraserRadii} from "@harrisontaee/react-nativ
 ```
 
 ## Usage
-Render the canvas with the all or none of the following props and it's ready to go out the box (state management is handled internally).
+Render the canvas with all or none of the following props and it's ready to go out of the box (state management is handled internally).
 ```tsx
 <Canvas
    /* Canvas styling */
@@ -48,10 +48,17 @@ Render the canvas with the all or none of the following props and it's ready to 
     */
    onDiff={console.log}
    onDiffThrottle={1000}
+
+   /** id
+    * If supplied, the canvas` local state will be cached and thus
+    * restored when the component is re-mounted. If not, the canvas
+    * will be destroyed when the component is unmounted.
+    */
+   id="canvas-0"
 />
 ```
 
-## Manipulate Imperatively
+## Imperative Manipulation
 Useful for when receiving or sending data to a remote or local database. Also useful for undo/redo functionality.
 ```tsx
 /* Import the hook */
@@ -60,18 +67,37 @@ import {useRef} from "react";
 /* Declare the reference */
 const ref = useRef();
 
+/* Extract data from the canvas */
+const paths = ref.current.getPaths();
+
 /* Imperatively manipulate the canvas */
-ref.current.getPaths();
-ref.current.clearPaths();
-ref.current.removePaths(["path-0"]);
-ref.current.addPaths([{
-   id: "path-1",
-   path: "M20,20 L40,20",
-   width: 300,
-   radius: 0.05,
-   colour: "#000000",
-   opacity: 0.75,
-}]);
+ref.current.diff({
+   created: { // creates new paths on the canvas
+      "path-2": {
+         path: "M 0 0 L 100 100",
+         width: 375,
+         colour: Colours.Black,
+         radius: 0.02,
+         opacity: 0.75
+      },
+   },
+   updated: { // updates existing paths on the canvas
+      "path-1": {
+         path: "M 50 50 L 200 200",
+         width: 390,
+         radius: 0.05,
+         opacity: 1
+      },
+   },
+   deleted: { // deletes paths from the canvas
+      "path-0": {
+         path: "M150 150 L 250 250",
+         width: 420,
+         radius: 0.02,
+         opacity: 1
+      },
+   },
+})
 
 /* Forward the reference to the canvas */
 return <Canvas ref={ref} />;
