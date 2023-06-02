@@ -19,6 +19,9 @@ import {Diff, Path} from "@harrisontaee/react-native-canvas";
 
 /* Enums */
 import {Colours, Tools, BrushRadii, EraserRadii} from "@harrisontaee/react-native-canvas";
+
+/* Methods */
+export {mergeDiffs} from "./utilities";
 ```
 
 ## Usage
@@ -42,9 +45,17 @@ Render the canvas with all or none of the following props and it's ready to go o
    eraserRadius={EraserRadii.Medium}
 
    /** onDiff
-    * Called when the user erases, draws or lassoes
-    * Will not be called when using the Imperative API (see below)
-    * Returns a Diff object
+    * Gives the user a 'snapshot' of what's changed on the canvas
+    * since the last diff. This can be throttled using the
+    * onDiffThrottle prop.
+    * Note that this will not be called when imperative
+    * methods are used (see `Imperative Manipulation` below)
+    * 
+    * returns a Diff object: {
+    *    created: {[pathId: string]: Path},
+    *    updated: {[pathId: string]: Path},
+    *    deleted: {[pathId: string]: Path}
+    * }
     */
    onDiff={console.log}
    onDiffThrottle={1000}
@@ -52,7 +63,7 @@ Render the canvas with all or none of the following props and it's ready to go o
    /** id
     * If supplied, the canvas` local state will be cached and thus
     * restored when the component is re-mounted. If not, the canvas
-    * will be destroyed when the component is unmounted.
+    * data will be destroyed once unmounted.
     */
    id="canvas-0"
 />
@@ -63,14 +74,18 @@ Useful for when receiving or sending data to a remote or local database. Also us
 ```tsx
 /* Import the hook */
 import {useRef} from "react";
-
+```
+```tsx
 /* Declare the reference */
 const ref = useRef();
 
 /* Extract data from the canvas */
 const paths = ref.current.getPaths();
 
-/* Imperatively manipulate the canvas */
+/**
+ * Imperatively manipulate tha canvas
+ * (This will not trigger the onDiff callback)
+ */
 ref.current.diff({
    created: { // creates new paths on the canvas
       "path-2": {

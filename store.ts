@@ -2,7 +2,7 @@ import {create} from "zustand";
 import {immer} from "zustand/middleware/immer";
 import {shallow} from "zustand/shallow";
 
-import {CELLS_PER_ROW, Grid, Paths, Selected, State} from "./constants";
+import {CELLS_PER_ROW, Diff, Grid, Paths, Selected, State} from "./constants";
 import {getCellsIntersectingSegment, getSegments} from "./utilities";
 
 export const usePathIds = (canvasId: string): string[] => useSlice(state => {
@@ -138,9 +138,9 @@ export const useStore = create<State>()(immer((set, get) => ({
 		
 		
 		/* Applies a Diff to the canvas */
-		diff: (canvasId: string, diff: any) => {
+		diff: (canvasId: string, diff: Diff) => {
 			const actions = get().actions;
-			const should1 =  actions.createPaths(canvasId, diff.created);
+			const should1 = actions.createPaths(canvasId, diff.created);
 			const should2 = actions.updatePaths(canvasId, diff.updated);
 			const should3 = actions.deletePaths(canvasId, diff.deleted);
 			if (should1 || should2 || should3) actions.createGrid(canvasId);
