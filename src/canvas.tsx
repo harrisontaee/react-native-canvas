@@ -1,7 +1,6 @@
 import {Canvas as SkiaCanvas, Circle as SkiaCircle, Path as SkiaPath, SkPath, Skia, useTouchHandler, useValue} from "@shopify/react-native-skia";
 import {forwardRef, memo, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {randomUUID} from "expo-crypto";
-import {useSharedValue} from "react-native-reanimated";
 
 import {BrushRadii, Colours, Diff, EraserRadii, InitialDiff, Tools} from "./constants";
 import {findPathIdsIntersectingCircle, mergeDiffs} from "./utilities";
@@ -19,15 +18,15 @@ export const Canvas = forwardRef(({
 	foreground = Colours.Black,
 	background = Colours.Transparent,
 	lassoColour = Colours.Purple,
-	brushColour = Colours.Black,
+	brushColour = null,
 	brushRadius = BrushRadii.Medium,
 	brushOpacity = 1,
 	eraserRadius = EraserRadii.Medium,
 	onIsTouching,
 	onDiffThrottle = 1000,
 }: {
-	id: string,
-	tool: Tools,
+	id?: string,
+	tool?: Tools,
 	style?: object | object[],
 	width?: number,
 	height?: number,
@@ -36,26 +35,26 @@ export const Canvas = forwardRef(({
 	isEnabled?: boolean,
 	foreground?: string,
 	background?: string,
-	lassoColour: string,
-	brushColour: string | null,
-	brushRadius: number,
-	brushOpacity: number,
-	eraserRadius: number,
+	lassoColour?: string,
+	brushColour?: string | null,
+	brushRadius?: number,
+	brushOpacity?: number,
+	eraserRadius?: number,
 	onIsTouching?: (isTouching: boolean) => any,
 	onDiffThrottle?: number;
 	shouldDestroyOnUnmount?: boolean;
 }, ref) => {
 
 	const [isTouching, setIsTouching] = useState(false);
-	const [canvasId, setCanvasId] = useState(idProp);
+	const [canvasId, setCanvasId] = useState(idProp || randomUUID());
 	const [width, setWidth] = useState<number>(widthProp || 1);
 	const [diff, setDiff] = useState<Diff>({...InitialDiff});
 	const selected = useSelected(canvasId);
 	const timeout = useRef();
 	const actions = useActions();
 	const pathIds = usePathIds(canvasId);
-	const touchX = useSharedValue<number>(0);
-	const touchY = useSharedValue<number>(0);
+	const touchX = useValue<number>(0);
+	const touchY = useValue<number>(0);
 	const path = useValue<SkPath>(Skia.Path.Make());
 
 
@@ -82,7 +81,9 @@ export const Canvas = forwardRef(({
 
 
 	const selectPaths = (x: number, y: number) => {
-		const state = useStore.getState().canvases[canvasId];
+		const canvases = useStore.getState().canvases;
+		if (!(canvasId in canvases)) return;
+		const state = canvases[canvasId];
 		const pathIds = findPathIdsIntersectingCircle(state.grid, {
 			x: x / width,
 			y: y / width,
@@ -106,8 +107,8 @@ export const Canvas = forwardRef(({
 	const onTouch = useTouchHandler({
 		onStart: touch => {
 			if (!isEnabled) return;
-			touchX.value = touch.x;
-			touchY.value = touch.y;
+			touchX.current = touch.x;
+			touchY.current = touch.y;
 			path.current = Skia.Path.Make();
 			path.current.moveTo(touch.x, touch.y);
 			path.current.lineTo(touch.x, touch.y);
@@ -121,8 +122,8 @@ export const Canvas = forwardRef(({
 		},
 		onActive: touch => {
 			if (!isEnabled) return;
-			touchX.value = touch.x;
-			touchY.value = touch.y;
+			touchX.current = touch.x;
+			touchY.current = touch.y;
 			switch (tool) {
 				case Tools.Brush:
 					path.current.lineTo(touch.x, touch.y);
@@ -134,7 +135,7 @@ export const Canvas = forwardRef(({
 		},
 		onEnd: () => {
 			if (!isEnabled) return;
-			const next = {created: {}, updated: {}, deleted: {}};
+			const next: Diff = {created: {}, updated: {}, deleted: {}};
 			switch (tool) {
 				case Tools.Brush:
 					next.created[randomUUID()] = {
@@ -146,9 +147,9 @@ export const Canvas = forwardRef(({
 					};
 					break;
 				case Tools.Eraser:
-					const canvas = useStore.getState().canvases[canvasId];
-					for (let pathId in canvas.selected) next.deleted[pathId] = canvas.paths[pathId];
-					break;
+					// const canvas = useStore.getState().canvases[canvasId];
+					// for (let pathId in canvas.selected) next.deleted[pathId] = canvas.paths[pathId];
+					// break;
 			};
 			setDiff((prev: Diff) => mergeDiffs(prev, next));
 			actions.diff(canvasId, next);
@@ -230,7 +231,7 @@ export const Canvas = forwardRef(({
 				cy={touchY}
 				r={pathRadius}
 				color={pathColour}
-				opacity={pathOpacity}
+				opacity={isTouching ? pathOpacity : 0}
 			/>
 			{children}
 		</SkiaCanvas>
@@ -253,6 +254,7 @@ export const MemoisedPath = memo(({
 
 }) => {
 	const path = usePath(canvasId, id);
+	if (!path) return;
 	return (
 		<SkiaPath
 			style="stroke"

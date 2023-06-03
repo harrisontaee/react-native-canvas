@@ -17,14 +17,24 @@ export type Path = {
 
 
 
+export interface Canvas {
+	grid: Grid;
+	paths: Paths;
+	selected: Selected;
+};
+
+
+
+export type Diff = {
+	created: Paths,
+	updated: Paths,
+	deleted: Paths,
+};
+
+
+
 export type State = {
-	canvases: {
-		[id: string]: {
-			grid: Grid;
-			paths: Paths;
-			selected: Selected;
-		};
-	};
+	canvases: {[id: string]: Canvas};
 	actions: {
 		createCanvas: (id: string) => void;
 		deleteCanvas: (id: string) => void;
@@ -36,14 +46,6 @@ export type State = {
 		getPaths: (canvasId: string) => Paths;
 		diff: (canvasId: string, diff: Diff) => void;
 	};
-};
-
-
-
-export type Diff = {
-	created: Paths,
-	updated: Paths,
-	deleted: Paths,
 };
 
 

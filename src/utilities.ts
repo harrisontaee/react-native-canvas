@@ -1,7 +1,7 @@
 import {Geometry} from "@harrisontaee/library";
 import {Skia} from "@shopify/react-native-skia";
 
-import {CELL_SIZE, Cell, Diff, Grid, Path, Point, Segment, Selected} from "./constants";
+import {CELLS_PER_ROW, CELL_SIZE, Cell, Diff, Grid, Path, Point, Segment, Selected} from "./constants";
 
 export const getSegments = (path: Path): Segment[] => {
 	const skPath = Skia.Path.MakeFromSVGString(path.path);
@@ -158,6 +158,6 @@ const getSegmentsIntersection = (a: Point, b: Point, c: Point, d: Point): Point 
 		{x: c[0], y: c[1]},
 		{x: d[0], y: d[1]},
 	);
-	if (!result) return result;
+	if (!result) return null;
 	return [result.x, result.y];
 };

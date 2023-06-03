@@ -1,5 +1,5 @@
 /* Component */
-export {Canvas} from "./canvas";
+export {Canvas, MemoisedCanvas} from "./canvas";
 
 /* Types */
 export {Diff, Path} from "./constants";

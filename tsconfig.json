@@ -1,5 +1,10 @@
 {
 	"compilerOptions": {
+	  "baseUrl": "./",
+	  "paths": {
+		 "@harrisontaee/react-native-canvas": ["./src/index"]
+	  },
+	  "lib": ["DOM", "ESNext"],
 	  "jsx": "react-jsx"
-	},
+	}
  }

@@ -2,7 +2,7 @@ import {create} from "zustand";
 import {immer} from "zustand/middleware/immer";
 import {shallow} from "zustand/shallow";
 
-import {CELLS_PER_ROW, Diff, Grid, Paths, Selected, State} from "./constants";
+import {CELLS_PER_ROW, Canvas, Diff, Grid, Path, Paths, Selected, State} from "./constants";
 import {getCellsIntersectingSegment, getSegments} from "./utilities";
 
 export const usePathIds = (canvasId: string): string[] => useSlice(state => {
@@ -20,7 +20,7 @@ export const useSelected = (canvasId: string) => useSlice(state => {
 
 
 export const usePath = (canvasId: string, pathId: string) => useSlice(state => {
-	if (!(canvasId in state.canvases) || !(pathId in state.canvases[canvasId])) return;
+	if (!(canvasId in state.canvases) || !(pathId in state.canvases[canvasId].paths)) return;
 	return state.canvases[canvasId].paths[pathId];
 });
 
@@ -28,14 +28,14 @@ export const usePath = (canvasId: string, pathId: string) => useSlice(state => {
 
 export const useActions = () => useStore(state => state.actions);
 export const useSlice = (selector: (state: State) => any) => useStore(selector, shallow);
-export const useStore = create<State>()(immer((set, get) => ({
+export const useStore = create(immer<State>((set, get) => ({
 	canvases: {},
 	actions: {
 
 		/* Adds a Canvas to the Store */
 		createCanvas: (id: string) => set((state) => {
 			if (id in state.canvases) return;
-			state.canvases[id] = {grid: [], paths: [], selectedIds: []};
+			state.canvases[id] = {grid: [], paths: {}, selected: {}};
 		}),
 
 
@@ -49,7 +49,7 @@ export const useStore = create<State>()(immer((set, get) => ({
 		/* Adds Paths to the canvas */
 		createPaths: (canvasId: string, paths: Paths) => {
 			let shouldRecreateGrid = false;
-			set(state => {
+			set((state: State) => {
 				if (!(canvasId in state.canvases)) return;
 				const canvas = state.canvases[canvasId];
 				for (let pathId in paths) {
@@ -68,7 +68,7 @@ export const useStore = create<State>()(immer((set, get) => ({
 			let shouldRecreateGrid = false;
 			set(state => {
 				if (!(canvasId in state.canvases)) return;
-				const canvas = state.canvases[canvasId];
+				const canvas: Canvas = state.canvases[canvasId];
 				for (let pathId in paths) {
 					if (!(pathId in canvas.paths)) continue;
 					let prev = state.canvases[canvasId].paths[pathId];
@@ -83,18 +83,17 @@ export const useStore = create<State>()(immer((set, get) => ({
 
 		/* Deletes Paths from the canvas */
 		deletePaths: (canvasId: string, paths: Paths) => {
-			let didDelete = false;
+			let shouldRecreateGrid = false;
 			set(state => {
 				if (!(canvasId in state.canvases)) return;
 				const canvas = state.canvases[canvasId];
 				for (let pathId in paths) {
 					if (!(pathId in canvas.paths)) continue;
-					let path = paths[pathId];
 					delete state.canvases[canvasId].paths[pathId];
-					didDelete = true;
+					shouldRecreateGrid = true;
 				};
 			});
-			return didDelete;
+			return shouldRecreateGrid;
 		},
 
 
@@ -118,6 +117,7 @@ export const useStore = create<State>()(immer((set, get) => ({
 				for (let segment of segments) {
 					const cells = getCellsIntersectingSegment(...segment);
 					for (let [row, col] of cells) {
+						if (row < 0 || row >= CELLS_PER_ROW || col < 0 || col >= CELLS_PER_ROW) continue;
 						if (!grid[row]) grid[row] = Array(CELLS_PER_ROW).fill({});
 						if (pathId in grid[row][col]) grid[row][col][pathId].push(segment);
 						else grid[row][col][pathId] = [segment];
@@ -131,7 +131,7 @@ export const useStore = create<State>()(immer((set, get) => ({
 		/* Gets paths */
 		getPaths: (canvasId: string) => {
 			const canvases = get().canvases;
-			if (!(canvasId in canvases)) return;
+			if (!(canvasId in canvases)) return {};
 			return canvases[canvasId].paths;
 		},
 
