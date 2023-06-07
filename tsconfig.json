@@ -6,12 +6,5 @@
 	  },
 	  "lib": ["DOM", "ESNext"],
 	  "jsx": "react-jsx"
-	},
-	"include": [
-		"src"
-	 ],
-	 "exclude": [
-		"node_modules",
-		"example",
-	 ]
+	}
  }
