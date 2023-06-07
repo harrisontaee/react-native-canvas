@@ -1,35 +1,35 @@
 {
 	"name": "@harrisontaee/react-native-canvas",
-	"version": "0.0.0",
-	"description": "A performant drawing component built on react-native-skia",
-	"main": "src/index.ts",
 	"author": "Harrison Taee <harrisontaee@protonmail.com> (https://github.com/harrisontaee)",
 	"license": "MIT",
+	"version": "0.0.0",
+	"description": "A performant drawing component built on react-native-skia",
+	"repository": "https://github.com/harrisontaee/react-native-canvas.git",
 	"homepage": "https://github.com/harrisontaee/react-native-canvas#readme",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/harrisontaee/react-native-canvas.git"
-	},
-	"bugs": {
-		"url": "https://github.com/harrisontaee/react-native-canvas/issues"
-	},
+	"bugs": "https://github.com/harrisontaee/react-native-canvas/issues",
+	"main": "src/index.ts",
+	"files": [
+		"src",
+		"README.md",
+		"LICENSE.md"
+	],
 	"peerDependencies": {
 		"expo": "*",
 		"react": ">=18.0",
-		"react-native": ">=0.64",
-		"react-native-reanimated": ">=2.0.0"
+		"react-native": ">=0.64"
 	},
 	"devDependencies": {
+		"@babel/core": "^7.22.1",
 		"@babel/plugin-proposal-export-namespace-from": "^7.18.9",
 		"@types/react": "^18.2.8",
 		"@types/react-native": "^0.72.2",
 		"typescript": "4.8.3"
 	},
 	"dependencies": {
-		"@harrisontaee/library": "^1.0.5",
+		"@harrisontaee/library": "^1.0.10",
 		"@shopify/react-native-skia": "^0.1.193",
 		"expo-crypto": "^12.2.2",
-		"immer": "^10.0.2",
-		"zustand": ">=4.0"
+		"immer": "^10.0.1",
+		"zustand": "^4.0.0"
 	}
 }

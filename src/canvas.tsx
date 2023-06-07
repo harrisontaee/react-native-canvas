@@ -6,25 +6,7 @@ import {BrushRadii, Colours, Diff, EraserRadii, InitialDiff, Tools} from "./cons
 import {findPathIdsIntersectingCircle, mergeDiffs} from "./utilities";
 import {useActions, usePath, usePathIds, useSelected, useStore} from "./store";
 
-export const Canvas = forwardRef(({
-	id: idProp,
-	tool = Tools.Brush,
-	style: styleProp,
-	width: widthProp,
-	height: heightProp,
-	onDiff,
-	children,
-	isEnabled = true,
-	foreground = Colours.Black,
-	background = Colours.Transparent,
-	lassoColour = Colours.Purple,
-	brushColour = null,
-	brushRadius = BrushRadii.Medium,
-	brushOpacity = 1,
-	eraserRadius = EraserRadii.Medium,
-	onIsTouching,
-	onDiffThrottle = 1000,
-}: {
+export type Props = {
 	id?: string,
 	tool?: Tools,
 	style?: object | object[],
@@ -43,7 +25,29 @@ export const Canvas = forwardRef(({
 	onIsTouching?: (isTouching: boolean) => any,
 	onDiffThrottle?: number;
 	shouldDestroyOnUnmount?: boolean;
-}, ref) => {
+};
+
+
+
+export const Canvas = forwardRef(({
+	id: idProp,
+	tool = Tools.Brush,
+	style: styleProp,
+	width: widthProp,
+	height: heightProp,
+	onDiff,
+	children,
+	isEnabled = true,
+	foreground = Colours.Black,
+	background = Colours.Transparent,
+	lassoColour = Colours.Purple,
+	brushColour = null,
+	brushRadius = BrushRadii.Medium,
+	brushOpacity = 1,
+	eraserRadius = EraserRadii.Medium,
+	onIsTouching,
+	onDiffThrottle = 1000,
+}: Props, ref) => {
 
 	const [isTouching, setIsTouching] = useState(false);
 	const [canvasId, setCanvasId] = useState(idProp || randomUUID());
@@ -97,7 +101,6 @@ export const Canvas = forwardRef(({
 
 
 	const onLayout = (event: any) => {
-		if (widthProp) return;
 		const layout = event.nativeEvent.layout;
 		if (layout.width !== width) setWidth(layout.width);
 	};
@@ -200,7 +203,7 @@ export const Canvas = forwardRef(({
 			onTouch={onTouch}
 			onLayout={onLayout}
 			style={[{
-				width,
+				width: widthProp || width,
 				height: heightProp || "100%",
 				backgroundColor: background
 			}, ...(Array.isArray(styleProp) ? styleProp : [styleProp])]}>

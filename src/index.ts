@@ -1,11 +1,3 @@
-/* Component */
-export {Canvas, MemoisedCanvas} from "./canvas";
-
-/* Types */
-export {Diff, Path} from "./constants";
-
-/* Enums */
-export {BrushRadii, Colours, EraserRadii, Tools} from "./constants";
-
-/* Methods */
+export {Canvas, MemoisedCanvas, Props} from "./canvas";
+export {BrushRadii, Colours, Diff, EraserRadii, Path, Tools} from "./constants";
 export {mergeDiffs} from "./utilities";

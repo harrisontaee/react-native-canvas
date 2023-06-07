@@ -1,6 +1,0 @@
-# Exclude all top-level hidden directories by convention
-/.*/
-
-/node_modules/
-/babel.config.js
-/example/

@@ -1,4 +1,4 @@
-export const CELLS_PER_ROW = 6;
+export const CELLS_PER_ROW = 5;
 export const CELL_SIZE = 1 / CELLS_PER_ROW;
 export const InitialDiff = {created: {}, updated: {}, deleted: {}};
 export type Selected = {[id: string]: any};
@@ -59,10 +59,10 @@ export enum Tools {
 
 
 export enum BrushRadii {
-	Small = 0.01,
-	Medium = 0.02,
-	Large = 0.03,
-	XLarge = 0.04
+	Small = 0.002,
+	Medium = 0.007,
+	Large = 0.013,
+	XLarge = 0.02
 };
 
 
@@ -80,6 +80,7 @@ export enum Colours {
 	Transparent = "#00000000",
 	Black = "#000000",
 	White = "#ffffff",
+	Grey = "#222222",
 	Red = "#ff0000",
 	Orange = "#ff8000",
 	Yellow = "#ffff00",
