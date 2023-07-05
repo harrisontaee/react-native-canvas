@@ -1,15 +1,15 @@
 # React Native Canvas
 
-A simple, performant and flexible drawing tool for React Native built with [react-native-skia](https://github.com/Shopify/react-native-skia) and [react-native-reanimated](https://docs.swmansion.com/react-native-reanimated/docs/). ***Not Ready for production... yet***.
+A simple, performant and flexible drawing tool for React Native built with [react-native-skia](https://github.com/Shopify/react-native-skia) **🚨 Not ready for production 🚨**.
 
-## Install
+![](demo.gif)
+
+## Installation
 ```bash
 yarn add @harrisontaee/react-native-canvas
 ```
 
-Note that this will not work with Expo Go as it depends on [reanimated v3.]() To use this library with Expo, create your own [development builds](https://docs.expo.dev/develop/development-builds/introduction/) and follow the instructions [here](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation) to install and configure reanimated.
-
-## Import
+## Imports
 ```tsx
 /* Component */
 import {Canvas} from "@harrisontaee/react-native-canvas";
@@ -38,11 +38,11 @@ Render the canvas with all or none of the following props and it's ready to go o
    /* Drawing tools */
    isEnabled={true}
    tool={Tools.Brush}
+   eraserRadius={0.03}
    brushOpacity={0.75}
-	brushRadius={0.005}
+   brushRadius={0.005}
    brushColour={Colours.Black}
    lassoColour={Colours.Purple}
-   eraserRadius={0.03}
 
    /** onDiff
     * Gives the user a 'snapshot' of what's changed on the canvas

@@ -150,9 +150,9 @@ export const Canvas = forwardRef(({
 					};
 					break;
 				case Tools.Eraser:
-					// const canvas = useStore.getState().canvases[canvasId];
-					// for (let pathId in canvas.selected) next.deleted[pathId] = canvas.paths[pathId];
-					// break;
+					const canvas = useStore.getState().canvases[canvasId];
+					for (let pathId in canvas.selected) next.deleted[pathId] = canvas.paths[pathId];
+					break;
 			};
 			setDiff((prev: Diff) => mergeDiffs(prev, next));
 			actions.diff(canvasId, next);

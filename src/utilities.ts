@@ -3,7 +3,7 @@ import {Skia} from "@shopify/react-native-skia";
 
 import {CELLS_PER_ROW, CELL_SIZE, Cell, Diff, Grid, Path, Point, Segment, Selected} from "./constants";
 
-export const getSegments = (path: Path): Segment[] => {
+export const getSegments = (path: Path, vertices = 1): Segment[] => {
 	const skPath = Skia.Path.MakeFromSVGString(path.path);
 	if (!skPath) return [];
 
@@ -12,7 +12,7 @@ export const getSegments = (path: Path): Segment[] => {
 	const width = path.width;
 	let a = skPath.getPoint(0);
 
-	for (let i = 1; i < points; i++) {
+	for (let i = vertices; i < points; i += vertices) {
 		const b = skPath.getPoint(i);
 		if (!b) break;
 		segments.push([[a.x / width, a.y / width], [b.x / width, b.y / width]]);

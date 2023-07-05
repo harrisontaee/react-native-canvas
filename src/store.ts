@@ -117,7 +117,7 @@ export const useStore = create(immer<State>((set, get) => ({
 				for (let segment of segments) {
 					const cells = getCellsIntersectingSegment(...segment);
 					for (let [row, col] of cells) {
-						if (row < 0 || row >= CELLS_PER_ROW || col < 0 || col >= CELLS_PER_ROW) continue;
+						if (row < 0 || col < 0 || col >= CELLS_PER_ROW) continue;
 						if (!grid[row]) grid[row] = Array(CELLS_PER_ROW).fill({});
 						if (pathId in grid[row][col]) grid[row][col][pathId].push(segment);
 						else grid[row][col][pathId] = [segment];
