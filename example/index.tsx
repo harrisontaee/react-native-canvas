@@ -7,8 +7,7 @@ import {SafeAreaProvider, initialWindowMetrics, useSafeAreaInsets} from "react-n
 import {registerRootComponent} from "expo";
 import {useMemo, useReducer, useState} from "react";
 
-import {CELLS_PER_ROW} from '../src/constants';
-
+const POINTS_PER_ROW = 10;
 const merge = (prev: any, next: any) => ({...prev, ...next});
 const InitialProps = {
 	tool: Tools.Brush,
@@ -47,11 +46,11 @@ const App = () => {
 const Grid = ({width, height}: {width: number, height: number}) => {
 	const picture = useMemo(() => createPicture({x: 0, y: 0, width, height}, canvas => {
 		const paint = Skia.Paint();
-		const cellSize = width / CELLS_PER_ROW;
+		const cellSize = width / POINTS_PER_ROW;
 		paint.setColor(Skia.Color(`${Colours.Black}0e`));
-		for (let row = 0; row <= Math.ceil(height / cellSize); row += 0.5) {
+		for (let row = 0; row <= Math.ceil(height / cellSize); row += 1) {
 			const cy = row * cellSize;
-			for (let col = 0; col <= CELLS_PER_ROW; col += 0.5) {
+			for (let col = 0; col <= POINTS_PER_ROW; col += 1) {
 				canvas.drawCircle(col * cellSize, cy, 2, paint);
 			};
 		};
@@ -209,20 +208,25 @@ const Toolbar = ({
 					onPress={() => setProps({tool: Tools.Eraser})}
 				/>
 			</View>
-			<View style={{width: 30}} />
+			<View style={{width: 20}} />
 			<View style={Styles.colours}>
 				{[null, Colours.Blue, Colours.Green, Colours.Purple, Colours.Red, Colours.Yellow].map(colour => (
 					<CircleButton
 						size={30}
 						key={colour}
 						onPress={() => {
-							setProps({brushColour: colour});
+							setProps({
+								brushColour: colour,
+								...(tool === Tools.Eraser ? {tool: Tools.Brush} : null)
+							});
 							if (isHighlighter) setHighlighter({brushColour: colour});
 							else setPen({brushColour: colour});
 						}}
 						style={{
-							margin: 2.5,
+							marginHorizontal: 2,
+							marginVertical: 1,
 							borderWidth: 2,
+							opacity: tool === Tools.Eraser ? 0.3 : 1,
 							borderColor: (tool === Tools.Brush && colour === brushColour) ? colour || foreground : "transparent"
 						}}>
 						<View style={{
@@ -249,8 +253,8 @@ const Styles = StyleSheet.create({
 	},
 	toolbar: {
 		position: "absolute",
-		height: 90,
-		borderRadius: 45,
+		height: 85,
+		borderRadius: 42.5,
 		backgroundColor: Colours.White,
 		shadowColor: Colours.Black,
 		shadowOffset: {width: 0, height: 0},
@@ -265,6 +269,7 @@ const Styles = StyleSheet.create({
 		height: "100%",
 		flexDirection: "row",
 		alignItems: "flex-end",
+		marginLeft: 5,
 	},
 	tool: {
 		marginHorizontal: 5,
