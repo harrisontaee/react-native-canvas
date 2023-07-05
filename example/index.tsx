@@ -1,9 +1,10 @@
 import {BrushRadii, Canvas, Colours, EraserRadii, Props, Tools} from "@harrisontaee/react-native-canvas";
 import {Circle, CircleButton, Icon, Rectangle} from "@harrisontaee/react-native";
+import {Picture, Skia, createPicture} from "@shopify/react-native-skia";
 import {SafeAreaProvider, initialWindowMetrics, useSafeAreaInsets} from "react-native-safe-area-context";
 import {StyleSheet, View} from "react-native";
 import {registerRootComponent} from "expo";
-import {useReducer, useState} from "react";
+import {useMemo, useReducer, useState} from "react";
 
 import {CELLS_PER_ROW} from '../src/constants';
 
@@ -28,8 +29,10 @@ const App = () => {
 			<View
 				style={Styles.Container}
 				onLayout={event => setLayout(event.nativeEvent.layout)}>
-				<Grid {...layout} />
-				<Canvas {...layout} {...props} />
+				{/* <Grid {...layout} /> */}
+				<Canvas {...layout} {...props}>
+					<Grid {...layout} />
+				</Canvas>
 				<Toolbar {...layout} {...props} setProps={setProps} />
 			</View>
 		</SafeAreaProvider>
@@ -41,35 +44,19 @@ const App = () => {
 
 
 const Grid = ({width, height}: {width: number, height: number}) => {
-	const size = width / CELLS_PER_ROW;
-	const cols = CELLS_PER_ROW - 1;
-	const rows = Math.ceil(height / size);
-	return (
-		<View style={Styles.Grid}>
-			{Array(cols).fill(null).map((_, i) => (
-				<View
-					key={`col-${i}`}
-					style={{
-						...Styles.GridLine,
-						height,
-						width: 1,
-						left: (i + 1) * size,
-					}}
-				/>
-			))}
-			{Array(rows).fill(null).map((_, i) => (
-				<View
-					key={`row-${i}`}
-					style={{
-						...Styles.GridLine,
-						height: 1,
-						width,
-						top: (i + 1) * size,
-					}}
-				/>
-			))}
-		</View>
-	);
+	const picture = useMemo(() => createPicture({x: 0, y: 0, width, height}, canvas => {
+		const paint = Skia.Paint();
+		const cellSize = width / CELLS_PER_ROW;
+		paint.setColor(Skia.Color(`${Colours.Black}0e`));
+		for (let row = 0; row <= Math.ceil(height / cellSize); row += 0.5) {
+			const cy = row * cellSize;
+			for (let col = 0; col <= CELLS_PER_ROW; col += 0.5) {
+				canvas.drawCircle(col * cellSize, cy, 2.5, paint);
+			};
+		};
+	}), [width, height]);
+
+	return <Picture picture={picture} />;
 };
 
 

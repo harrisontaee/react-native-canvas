@@ -206,7 +206,9 @@ export const Canvas = forwardRef(({
 				width: widthProp || width,
 				height: heightProp || "100%",
 				backgroundColor: background
-			}, ...(Array.isArray(styleProp) ? styleProp : [styleProp])]}>
+			}, ...(Array.isArray(styleProp) ? styleProp : [styleProp])]}
+			>
+			{children}
 			{pathIds.map((id: string) => {
 				const isSelected = id in selected;
 				if (isSelected && tool === Tools.Eraser) return null;
@@ -236,7 +238,6 @@ export const Canvas = forwardRef(({
 				color={pathColour}
 				opacity={isTouching ? pathOpacity : 0}
 			/>
-			{children}
 		</SkiaCanvas>
 	);
 });
