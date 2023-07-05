@@ -58,33 +58,15 @@ export enum Tools {
 
 
 
-export enum BrushRadii {
-	Small = 0.002,
-	Medium = 0.007,
-	Large = 0.013,
-	XLarge = 0.02
-};
-
-
-
-export enum EraserRadii {
-	Small = 0.01,
-	Medium = 0.02,
-	Large = 0.03,
-	XLarge = 0.04
-};
-
-
-
 export enum Colours {
 	Transparent = "#00000000",
 	Black = "#000000",
 	White = "#ffffff",
 	Grey = "#222222",
-	Red = "#ff0000",
+	Red = "#e5474b",
 	Orange = "#ff8000",
-	Yellow = "#ffff00",
-	Green = "#00ff00",
-	Blue = "#0000ff",
+	Yellow = "#f4d153",
+	Green = "#77d576",
+	Blue = "#3b7cf3",
 	Purple = "#8000ff"
 };

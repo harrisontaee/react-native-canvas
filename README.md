@@ -18,7 +18,7 @@ import {Canvas} from "@harrisontaee/react-native-canvas";
 import {Diff, Path} from "@harrisontaee/react-native-canvas";
 
 /* Enums */
-import {Colours, Tools, BrushRadii, EraserRadii} from "@harrisontaee/react-native-canvas";
+import {Colours, Tools} from "@harrisontaee/react-native-canvas";
 
 /* Methods */
 export {mergeDiffs} from "./utilities";
@@ -39,10 +39,10 @@ Render the canvas with all or none of the following props and it's ready to go o
    isEnabled={true}
    tool={Tools.Brush}
    brushOpacity={0.75}
+	brushRadius={0.005}
    brushColour={Colours.Black}
-   brushRadius={BrushRadii.Medium}
    lassoColour={Colours.Purple}
-   eraserRadius={EraserRadii.Medium}
+   eraserRadius={0.03}
 
    /** onDiff
     * Gives the user a 'snapshot' of what's changed on the canvas

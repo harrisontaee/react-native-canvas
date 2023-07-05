@@ -2,7 +2,7 @@ import {Canvas as SkiaCanvas, Circle as SkiaCircle, Path as SkiaPath, SkPath, Sk
 import {forwardRef, memo, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {randomUUID} from "expo-crypto";
 
-import {BrushRadii, Colours, Diff, EraserRadii, InitialDiff, Tools} from "./constants";
+import {Colours, Diff, InitialDiff, Tools} from "./constants";
 import {findPathIdsIntersectingCircle, mergeDiffs} from "./utilities";
 import {useActions, usePath, usePathIds, useSelected, useStore} from "./store";
 
@@ -42,9 +42,9 @@ export const Canvas = forwardRef(({
 	background = Colours.Transparent,
 	lassoColour = Colours.Purple,
 	brushColour = null,
-	brushRadius = BrushRadii.Medium,
+	brushRadius = 0.005,
 	brushOpacity = 1,
-	eraserRadius = EraserRadii.Medium,
+	eraserRadius = 0.03,
 	onIsTouching,
 	onDiffThrottle = 1000,
 }: Props, ref) => {
