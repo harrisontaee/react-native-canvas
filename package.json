@@ -28,7 +28,7 @@
 		"@harrisontaee/library": "^1.0.10",
 		"@shopify/react-native-skia": "^0.1.193",
 		"expo-crypto": "^12.2.2",
-		"immer": "^10.0.1",
-		"zustand": "^4.0.0"
+		"immer": "^10.0.2",
+		"zustand": "^4.4.1"
 	}
 }

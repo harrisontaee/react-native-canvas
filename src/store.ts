@@ -1,25 +1,25 @@
-import {create} from "zustand";
+import {createWithEqualityFn} from "zustand/traditional";
 import {immer} from "zustand/middleware/immer";
 import {shallow} from "zustand/shallow";
 
 import {CELLS_PER_ROW, Canvas, Diff, Grid, Path, Paths, Selected, State} from "./constants";
 import {getCellsIntersectingSegment, getSegments} from "./utilities";
 
-export const usePathIds = (canvasId: string): string[] => useSlice(state => {
+export const usePathIds = (canvasId: string): string[] => useStore(state => {
 	if (!(canvasId in state.canvases)) return [];
 	return Object.keys(state.canvases[canvasId].paths);
 });
 
 
 
-export const useSelected = (canvasId: string) => useSlice(state => {
+export const useSelected = (canvasId: string) => useStore(state => {
 	if (!(canvasId in state.canvases)) return [];
 	return state.canvases[canvasId].selected;
 });
 
 
 
-export const usePath = (canvasId: string, pathId: string) => useSlice(state => {
+export const usePath = (canvasId: string, pathId: string) => useStore(state => {
 	if (!(canvasId in state.canvases) || !(pathId in state.canvases[canvasId].paths)) return;
 	return state.canvases[canvasId].paths[pathId];
 });
@@ -27,8 +27,7 @@ export const usePath = (canvasId: string, pathId: string) => useSlice(state => {
 
 
 export const useActions = () => useStore(state => state.actions);
-export const useSlice = (selector: (state: State) => any) => useStore(selector, shallow);
-export const useStore = create(immer<State>((set, get) => ({
+export const useStore = createWithEqualityFn(immer<State>((set, get) => ({
 	canvases: {},
 	actions: {
 
@@ -146,4 +145,4 @@ export const useStore = create(immer<State>((set, get) => ({
 			if (should1 || should2 || should3) actions.createGrid(canvasId);
 		},
 	}
-})));
+})), shallow);

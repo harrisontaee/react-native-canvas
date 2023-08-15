@@ -6,7 +6,13 @@ A simple, performant and flexible drawing tool for React Native built with [reac
 
 ## Installation
 ```bash
-yarn add @harrisontaee/react-native-canvas
+yarn add @harrisontaee/react-native-canvas # OR npm install @harrisontaee/react-native-canvas
+```
+
+## Example
+```bash
+cd example
+yarn # OR npm install
 ```
 
 ## Imports
